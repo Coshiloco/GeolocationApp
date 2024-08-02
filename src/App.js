@@ -24,8 +24,10 @@ function App() {
     try {
     console.log("Que me esta llegando aqui   :", newPin);
       const addedPin = await addPin(newPin);
+      console.log("Que tiene el state : ", pins)
       setPins([...pins, addedPin]);
     } catch (error) {
+      
       console.error('Error al añadir el pin:', error);
       // Aquí puedes manejar el error, por ejemplo, mostrando una notificación al usuario
     }

@@ -24,8 +24,8 @@ function SetViewOnClick({ coords }) {
 
 function AddMarkerToClick({ onAddPin }) {
   const map = useMap();
-  React.useEffect(() => {
-    map.on('click', (e) => {
+  useEffect(() => {
+    const handleMapClick = (e) => {
       const newPin = {
         id: Date.now(),
         lat: e.latlng.lat,
@@ -33,8 +33,14 @@ function AddMarkerToClick({ onAddPin }) {
         name: `New Pin ${Date.now()}`,
       };
       onAddPin(newPin);
-    });
+    };
+
+    map.on('click', handleMapClick);
+    return () => {
+      map.off('click', handleMapClick);
+    };
   }, [map, onAddPin]);
+
   return null;
 }
 
