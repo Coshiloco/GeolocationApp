@@ -14,7 +14,6 @@ function App() {
   useEffect(() => {
     const fetchPins = async () => {
       const fetchedPins = await getPins();
-      console.log("Esta llegando aqui");
       setPins(fetchedPins);
     };
     fetchPins();
@@ -22,14 +21,11 @@ function App() {
 
   const handleAddPin = async (newPin) => {
     try {
-    console.log("Que me esta llegando aqui   :", newPin);
       const addedPin = await addPin(newPin);
-      console.log("Que tiene el state : ", pins)
       setPins([...pins, addedPin]);
     } catch (error) {
       
-      console.error('Error al añadir el pin:', error);
-      // Aquí puedes manejar el error, por ejemplo, mostrando una notificación al usuario
+      console.error('Error to add pin:', error);
     }
   };
 
@@ -41,17 +37,16 @@ function App() {
   const handleSavePin = async (updatedPin) => {
     try {
       const savedPin = await updatePin(updatedPin);
-    setPins(pins.map(pin => pin.id === updatedPin.id ? updatedPin : pin));
+      setPins(pins.map(pin => pin.id === savedPin.id ? savedPin : pin));
     } catch (error) {
-      console.error('Error al actualizar el pin:', error);
-      // Aquí puedes manejar el error, por ejemplo, mostrando una notificación al usuario
+      console.error('Error to update pin:', error);
     }
   };
 
   const handleSidebarPinClick = (pin) => {
     if (mapRef.current && mapRef.current.flyTo) {
       mapRef.current.flyTo([pin.lat, pin.lng], 13, {
-        duration: 2 // Duración de la animación en segundos
+        duration: 2
       });
     }
     setSelectedPin(pin);

@@ -7,7 +7,7 @@ import { MONGO_URL } from './config/config.js';
 const app = express();
 const port = 5000;
 
-// Create a MongoClient with a MongoClientOptions object to set the Stable API version
+
 const client = new MongoClient(MONGO_URL, {
   serverApi: {
     version: ServerApiVersion.v1,
@@ -18,13 +18,10 @@ const client = new MongoClient(MONGO_URL, {
 
 async function run() {
   try {
-    // Connect the client to the server	(optional starting in v4.7)
     await client.connect();
-    // Send a ping to confirm a successful connection
     await client.db("admin").command({ ping: 1 });
     console.log("Pinged your deployment. You successfully connected to MongoDB!");
   } finally {
-    // Ensures that the client will close when you finish/error
     await client.close();
   }
 }
@@ -58,7 +55,7 @@ app.use(express.json());
 app.use(cors());
 
 app.get("/", (req, res) => {
-    res.send("La aplicación está funcionando");
+    res.send("The server is running");
 });
 
 app.post("/pin", async (req, res) => {
@@ -67,7 +64,7 @@ app.post("/pin", async (req, res) => {
         let result = await pin.save();
         res.status(201).json(result);
     } catch (error) {
-        res.status(400).send("Ocurrió un error al guardar el pin");
+        res.status(400).send("Error to save pin");
     }
 });
 
@@ -76,7 +73,7 @@ app.get("/pins", async (req, res) => {
         const pins = await Pin.find();
         res.json(pins);
     } catch (error) {
-        res.status(500).send("Error al obtener los pines");
+        res.status(500).send("Error to obtain pins");
     }
 });
 
@@ -88,15 +85,15 @@ app.put("/pin/:id", async (req, res) => {
     try {
         const updatedPin = await Pin.findOneAndUpdate({ id: parseInt(id) }, { name }, { new: true });
         if (!updatedPin) {
-            return res.status(404).send("Pin no encontrado");
+            return res.status(404).send("Pin not found");
         }
         res.json(updatedPin);
     } catch (error) {
-        res.status(400).send("Ocurrió un error al actualizar el pin");
+        res.status(400).send("Error updating pin");
     }
 });
 
 
 app.listen(port, () => {
-    console.log(`Servidor escuchando en el puerto ${port}`);
+    console.log(`Server listening in port  ${port}`);
 });

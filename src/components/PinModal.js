@@ -23,8 +23,7 @@ function PinModal({ pin, onClose, onSave }) {
       onSave(savedPin);
       onClose();
     } catch (error) {
-      console.error('Error al actualizar el pin:', error);
-      // Manejar el error, por ejemplo, mostrando una notificación al usuario
+      console.error('Error to update pin:', error);
     }
   };
 
@@ -33,29 +32,29 @@ function PinModal({ pin, onClose, onSave }) {
   return (
     <Modal show={true} onHide={onClose}>
       <Modal.Header closeButton>
-        <Modal.Title>Editar Pin</Modal.Title>
+        <Modal.Title>Update Pin</Modal.Title>
       </Modal.Header>
       <Modal.Body>
         <Form>
           <Form.Group controlId="formPinName">
-            <Form.Label>Nombre</Form.Label>
+            <Form.Label>Name: </Form.Label>
             <Form.Control
               type="text"
               value={name}
               onChange={(e) => setName(e.target.value)}
             />
           </Form.Group>
-          <p>Dirección: {address}</p>
-          <p>Latitud: {pin.lat}</p>
-          <p>Longitud: {pin.lng}</p>
+          <p>Address: {address}</p>
+          <p>Latitude: {pin.lat}</p>
+          <p>Longitude: {pin.lng}</p>
         </Form>
       </Modal.Body>
       <Modal.Footer>
         <Button variant="secondary" onClick={onClose}>
-          Cerrar
+          Close
         </Button>
         <Button variant="primary" onClick={handleSave}>
-          Guardar
+          Save
         </Button>
       </Modal.Footer>
     </Modal>

@@ -1,4 +1,4 @@
-import React, { useRef, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { MapContainer, TileLayer, Marker, Popup, useMap, ZoomControl } from 'react-leaflet';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
@@ -50,7 +50,7 @@ function MapContent({ pins, onAddPin, onPinClick }) {
   const [initialLoad, setInitialLoad] = useState(true);
 
   if (error) {
-    console.error("Error obteniendo geolocalización:", error);
+    console.error("Error obtained user location:", error);
   }
 
   const position = location ? [location.latitude, location.longitude] : defaultPosition;
@@ -87,7 +87,7 @@ function MapContent({ pins, onAddPin, onPinClick }) {
 const Map = React.forwardRef(({ pins, onAddPin, onPinClick }, ref) => {
   return (
     <MapContainer 
-      center={[40.4168, -3.7038]} // Madrid como centro inicial
+      center={[40.4168, -3.7038]}
       zoom={13} 
       style={{ height: '100vh', width: '100%' }}
       zoomControl={false}
