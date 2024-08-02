@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef, useEffect, useState } from 'react';
 import { MapContainer, TileLayer, Marker, Popup, useMap, ZoomControl } from 'react-leaflet';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
@@ -14,7 +14,11 @@ L.Icon.Default.mergeOptions({
 
 function SetViewOnClick({ coords }) {
   const map = useMap();
-  map.setView(coords, map.getZoom());
+  useEffect(() => {
+    if (coords) {
+      map.flyTo(coords, map.getZoom());
+    }
+  }, [coords, map]);
   return null;
 }
 
@@ -34,9 +38,10 @@ function AddMarkerToClick({ onAddPin }) {
   return null;
 }
 
-function Map({ pins, onAddPin, onPinClick }) {
+function MapContent({ pins, onAddPin, onPinClick }) {
   const { location, error } = useGeolocation();
-  const defaultPosition = [0, 0]; // Posición por defecto si no hay geolocalización
+  const defaultPosition = [40.4168, -3.7038]; // Madrid como posición por defecto
+  const [initialLoad, setInitialLoad] = useState(true);
 
   if (error) {
     console.error("Error obteniendo geolocalización:", error);
@@ -44,19 +49,20 @@ function Map({ pins, onAddPin, onPinClick }) {
 
   const position = location ? [location.latitude, location.longitude] : defaultPosition;
 
+  useEffect(() => {
+    if (initialLoad && location) {
+      setInitialLoad(false);
+    }
+  }, [location, initialLoad]);
+
   return (
-    <MapContainer 
-      center={position} 
-      zoom={13} 
-      style={{ height: '100vh', width: '100%' }}
-      zoomControl={false}
-    >
+    <>
       <TileLayer
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
       />
       <ZoomControl position="bottomright" />
-      {location && <SetViewOnClick coords={position} />}
+      {initialLoad && <SetViewOnClick coords={position} />}
       <AddMarkerToClick onAddPin={onAddPin} />
       {pins.map((pin) => (
         <Marker key={pin.id} position={[pin.lat, pin.lng]} eventHandlers={{ click: () => onPinClick(pin) }}>
@@ -68,8 +74,22 @@ function Map({ pins, onAddPin, onPinClick }) {
           <Popup>You are here</Popup>
         </Marker>
       )}
-    </MapContainer>
+    </>
   );
 }
+
+const Map = React.forwardRef(({ pins, onAddPin, onPinClick }, ref) => {
+  return (
+    <MapContainer 
+      center={[40.4168, -3.7038]} // Madrid como centro inicial
+      zoom={13} 
+      style={{ height: '100vh', width: '100%' }}
+      zoomControl={false}
+      ref={ref}
+    >
+      <MapContent pins={pins} onAddPin={onAddPin} onPinClick={onPinClick} />
+    </MapContainer>
+  );
+});
 
 export default Map;

@@ -1,14 +1,15 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import Map from './components/Map';
 import Sidebar from './components/Sidebar';
 import PinModal from './components/PinModal';
-import { getPins } from './services/mockApi';
+import { getPins, addPin } from './services/mockApi';
 import './styles/main.css';
 
 function App() {
   const [pins, setPins] = useState([]);
   const [selectedPin, setSelectedPin] = useState(null);
   const [showModal, setShowModal] = useState(false);
+  const mapRef = useRef();
 
   useEffect(() => {
     const fetchPins = async () => {
@@ -27,12 +28,25 @@ function App() {
     setShowModal(true);
   };
 
+  const handleSavePin = (updatedPin) => {
+    setPins(pins.map(pin => pin.id === updatedPin.id ? updatedPin : pin));
+  };
+
+  const handleSidebarPinClick = (pin) => {
+    if (mapRef.current && mapRef.current.flyTo) {
+      mapRef.current.flyTo([pin.lat, pin.lng], 13, {
+        duration: 2 // Duración de la animación en segundos
+      });
+    }
+    setSelectedPin(pin);
+  };
+
   return (
     <div className="app-container">
-      <Sidebar pins={pins} onPinClick={handlePinClick} />
-      <Map pins={pins} onAddPin={handleAddPin} onPinClick={handlePinClick} />
+      <Sidebar pins={pins} onPinClick={handleSidebarPinClick} />
+      <Map ref={mapRef} pins={pins} onAddPin={handleAddPin} onPinClick={handlePinClick} />
       {showModal && (
-        <PinModal pin={selectedPin} onClose={() => setShowModal(false)} />
+        <PinModal pin={selectedPin} onClose={() => setShowModal(false)} onSave={handleSavePin} />
       )}
     </div>
   );
