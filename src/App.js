@@ -14,13 +14,21 @@ function App() {
   useEffect(() => {
     const fetchPins = async () => {
       const fetchedPins = await getPins();
+      console.log("Esta llegando aqui");
       setPins(fetchedPins);
     };
     fetchPins();
   }, []);
 
-  const handleAddPin = (newPin) => {
-    setPins([...pins, newPin]);
+  const handleAddPin = async (newPin) => {
+    try {
+    console.log("Que me esta llegando aqui   :", newPin);
+      const addedPin = await addPin(newPin);
+      setPins([...pins, addedPin]);
+    } catch (error) {
+      console.error('Error al añadir el pin:', error);
+      // Aquí puedes manejar el error, por ejemplo, mostrando una notificación al usuario
+    }
   };
 
   const handlePinClick = (pin) => {

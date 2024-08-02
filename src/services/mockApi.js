@@ -19,11 +19,12 @@ const mockPins = [
     }
   };
   
-  export const addPin = (newPin) => {
-    return new Promise((resolve) => {
-      setTimeout(() => {
-        mockPins.push(newPin);
-        resolve(newPin);
-      }, 500);
-    });
+  export const addPin = async (newPin) => {
+    try {
+      const response = await axios.post(`${API_URL}/pin`, newPin);
+      return response.data;
+    } catch (error) {
+      console.error('Error al añadir el pin:', error);
+      throw error;
+    }
   };

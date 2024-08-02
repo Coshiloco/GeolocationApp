@@ -33,19 +33,19 @@ run().catch(console.dir);
 mongoose.connect(MONGO_URL);
 
 const PinSchema = new mongoose.Schema({
-    latitude: {
+    id: {
         type: Number,
         required: true,
     },
-    longitude: {
+    lat: {
         type: Number,
         required: true,
     },
-    title: {
-        type: String,
+    lng: {
+        type: Number,
         required: true,
     },
-    description: String,
+    name: String,
     date: {
         type: Date,
         default: Date.now,
