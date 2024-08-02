@@ -28,3 +28,14 @@ const mockPins = [
       throw error;
     }
   };
+  
+  export const updatePin = async (updatedPin) => {
+    try {
+      const response = await axios.put(`${API_URL}/pin/${updatedPin.id}`, updatedPin);
+      return response.data;
+    } catch (error) {
+      console.error('Error al actualizar el pin:', error);
+      throw error;
+    }
+  };
+  

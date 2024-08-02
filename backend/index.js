@@ -80,6 +80,23 @@ app.get("/pins", async (req, res) => {
     }
 });
 
+// Ruta para actualizar un pin
+app.put("/pin/:id", async (req, res) => {
+    const { id } = req.params;
+    const { name } = req.body;
+
+    try {
+        const updatedPin = await Pin.findOneAndUpdate({ id: parseInt(id) }, { name }, { new: true });
+        if (!updatedPin) {
+            return res.status(404).send("Pin no encontrado");
+        }
+        res.json(updatedPin);
+    } catch (error) {
+        res.status(400).send("Ocurrió un error al actualizar el pin");
+    }
+});
+
+
 app.listen(port, () => {
     console.log(`Servidor escuchando en el puerto ${port}`);
 });

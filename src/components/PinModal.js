@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { Modal, Button, Form } from 'react-bootstrap';
 import axios from 'axios';
 
+import { updatePin } from '../services/mockApi';
+
 function PinModal({ pin, onClose, onSave }) {
   const [name, setName] = useState(pin.name);
   const [address, setAddress] = useState('');
@@ -14,9 +16,16 @@ function PinModal({ pin, onClose, onSave }) {
     fetchAddress();
   }, [pin]);
 
-  const handleSave = () => {
-    onSave({ ...pin, name });
-    onClose();
+  const handleSave = async () => {
+    try {
+      const updatedPin = { ...pin, name };
+      const savedPin = await updatePin(updatedPin);
+      onSave(savedPin);
+      onClose();
+    } catch (error) {
+      console.error('Error al actualizar el pin:', error);
+      // Manejar el error, por ejemplo, mostrando una notificación al usuario
+    }
   };
 
   if (!pin) return null;

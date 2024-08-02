@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import Map from './components/Map';
 import Sidebar from './components/Sidebar';
 import PinModal from './components/PinModal';
-import { getPins, addPin } from './services/mockApi';
+import { getPins, addPin, updatePin } from './services/mockApi';
 import './styles/main.css';
 
 function App() {
@@ -38,8 +38,14 @@ function App() {
     setShowModal(true);
   };
 
-  const handleSavePin = (updatedPin) => {
+  const handleSavePin = async (updatedPin) => {
+    try {
+      const savedPin = await updatePin(updatedPin);
     setPins(pins.map(pin => pin.id === updatedPin.id ? updatedPin : pin));
+    } catch (error) {
+      console.error('Error al actualizar el pin:', error);
+      // Aquí puedes manejar el error, por ejemplo, mostrando una notificación al usuario
+    }
   };
 
   const handleSidebarPinClick = (pin) => {
