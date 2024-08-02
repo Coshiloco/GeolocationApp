@@ -5,68 +5,95 @@ body, html {
     height: 100%;
     margin: 0;
     padding: 0;
-}
+  }
   
-.app-container {
+  .app-container {
     display: flex;
     height: 100vh;
-}
+  }
   
   /* Estilos para el sidebar */
-.sidebar {
-    width: 250px;
+  .sidebar {
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: 100%;
     background-color: #f8f9fa;
+    transition: transform 0.3s ease-in-out;
+    z-index: 1000;
+    transform: translateX(-100%);
+    width: 250px;
+  }
+  
+  .sidebar.open {
+    transform: translateX(0);
+  }
+  
+  .sidebar-content {
     padding: 20px;
     overflow-y: auto;
-}
+    height: calc(100% - 60px);
+  }
   
-.pin-list {
+  .hamburger-button {
+    position: absolute;
+    left: 100%;
+    top: 10px;
+    background-color: #fff;
+    border: 1px solid #dee2e6;
+    padding: 10px;
+    cursor: pointer;
+    z-index: 1001;
+  }
+  
+  .pin-list {
     list-style-type: none;
     padding: 0;
-}
+  }
   
-.pin-list li {
+  .pin-list li {
     cursor: pointer;
     padding: 10px;
     border-bottom: 1px solid #dee2e6;
-}
+  }
   
-.pin-list li:hover {
+  .pin-list li:hover {
     background-color: #e9ecef;
-}
+  }
   
   /* Estilos para el mapa */
-.leaflet-container {
+  .leaflet-container {
     flex-grow: 1;
     height: 100%;
-}
+    width: 100%;
+  }
   
   /* Estilos responsivos */
-@media (max-width: 768px) {
-    .app-container {
-      flex-direction: column;
-    }
-  
+  @media (max-width: 768px) {
     .sidebar {
       width: 100%;
-      height: 200px;
+      max-width: 300px;
     }
-  
-    .leaflet-container {
-      height: calc(100vh - 200px);
-    }
-}
+  }
   
   /* Estilos adicionales para el modal */
-.modal-content {
+  .modal-content {
     border-radius: 0.3rem;
-}
+  }
   
-.modal-header {
+  .modal-header {
     background-color: #f8f9fa;
     border-bottom: 1px solid #dee2e6;
-}
+  }
   
-.modal-footer {
+  .modal-footer {
     border-top: 1px solid #dee2e6;
-}
+  }
+  
+  /* Estilos para los controles de zoom */
+  .leaflet-control-zoom {
+    position: fixed !important;
+    bottom: 20px !important;
+    right: 20px !important;
+    z-index: 1000;
+  }

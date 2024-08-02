@@ -1,5 +1,5 @@
 import React from 'react';
-import { MapContainer, TileLayer, Marker, Popup, useMap } from 'react-leaflet';
+import { MapContainer, TileLayer, Marker, Popup, useMap, ZoomControl } from 'react-leaflet';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import useGeolocation from '../hooks/useGeolocation';
@@ -45,11 +45,17 @@ function Map({ pins, onAddPin, onPinClick }) {
   const position = location ? [location.latitude, location.longitude] : defaultPosition;
 
   return (
-    <MapContainer center={position} zoom={13} style={{ height: '100vh', width: '100%' }}>
+    <MapContainer 
+      center={position} 
+      zoom={13} 
+      style={{ height: '100vh', width: '100%' }}
+      zoomControl={false}
+    >
       <TileLayer
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
       />
+      <ZoomControl position="bottomright" />
       {location && <SetViewOnClick coords={position} />}
       <AddMarkerToClick onAddPin={onAddPin} />
       {pins.map((pin) => (
